@@ -12,8 +12,9 @@ contract DecentPrimalLotteryUser{
     // structure for user of the lottery
     struct UserInfo { 
         string userName;
-        uint32 totalCost;
+        uint32 totalCost;   // change this to uint256, incase of using wei or Gwei, or keep it with ether and change it to totalCostInEther
         bool isWinnerOfCurrentPool;
+        uint256 winningAmountOfCurrentPool;
     }
 
 
@@ -28,7 +29,8 @@ contract DecentPrimalLotteryUser{
     // TO-DO: simplify the mapping system
     mapping (address => string) internal addressToUserName;
     mapping (string => address) internal userNameToAddress;
-    mapping (address => UserInfo) internal addressToUserInfo; 
+    mapping (address => UserInfo) internal addressToUserInfo;
+    // TO-DO: need to add a mapping to facilitate finding the max totalCost user  
 
 
     // This function modifier ensures that the calling address for certain functions 
@@ -49,7 +51,7 @@ contract DecentPrimalLotteryUser{
 
     // This function will create a UserInfo Struct and store it into usersDataLedger,
     // this function is interacable with functions/users/contracts outside of the contract
-    function createUserInfo(string memory _userName) public {
+    function createUserInfo(string memory _userName) external  { // changed to external from public
         // TO-DO: Add user name legal/secure checking
         
         //check if a username has been previously taken
@@ -59,7 +61,8 @@ contract DecentPrimalLotteryUser{
         UserInfo memory newUser = UserInfo({
             userName: _userName,
             totalCost: 0,
-            isWinnerOfCurrentPool: false
+            isWinnerOfCurrentPool: false,
+            winningAmountOfCurrentPool: 0
         }); 
 
         usersDataLedger.push(newUser);
@@ -73,13 +76,11 @@ contract DecentPrimalLotteryUser{
 
     // let the address know its user name
     // TO-DO: make it that address know all of its user name
-    function checkMyUserName() public view validUser() returns(string memory) {
+    function checkMyUserName() external view validUser() returns(string memory) { // changed from public to external
         
         return addressToUserInfo[msg.sender].userName;
     }
 
-
-    // let the address know 
 
 
 }
