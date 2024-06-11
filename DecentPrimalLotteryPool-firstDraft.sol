@@ -7,6 +7,7 @@ pragma solidity 0.8.24;
 
 import "./Ownable.sol";
 
+//TO-DO: add more comments
 contract DecentPrimalLotteryPool is Ownable{
 
     // initate pool related varaibales
